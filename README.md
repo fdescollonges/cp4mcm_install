@@ -62,9 +62,10 @@ You need at least one cluster with:
 1. Register Cluster
 2. Execute on each cluster
   
-  ```bash
-  kubectl create secret docker-registry pull-secret-hub --docker-username=ekey --docker-password=<MY ENTITLEMENT KEY> --docker-email=demo@ibm.com --docker-server=cp.icr.io -n multicluster-endpoint
-  ```
+	```bash
+	kubectl create secret docker-registry pull-secret-hub --docker-username=ekey --docker-password=<MY ENTITLEMENT KEY> --docker-email=demo@ibm.com --docker-server=cp.icr.io -n multicluster-endpoint
+	```
+	
 3. Add cluster namespace to team
 4. Label each cluster with ibm.com/cloud-native-monitoring=enabled 
 
@@ -76,11 +77,11 @@ You need at least one cluster with:
 1. Create DC
 2. Execute on each cluster
   
-  ```bash
-  kubectl -n cp4mcm-cloud-native-monitoring create secret generic ibm-agent-https-secret --from-file=./ibm-cloud-apm-dc-configpack/keyfiles/cert.pem --from-file=./ibm-cloud-apm-dc-configpack/keyfiles/ca.pem --from-file=./ibm-cloud-apm-dc-configpack/keyfiles/key.pem
-	
-  kubectl create secret docker-registry pull-secret-hub --docker-username=ekey --docker-password=<MY ENTITLEMENT KEY> --docker-email=demo@ibm.com --docker-server=cp.icr.io -n cp4mcm-cloud-native-monitoring
-  ```
+	```bash
+	kubectl -n cp4mcm-cloud-native-monitoring create secret generic ibm-agent-https-secret --from-file=./ibm-cloud-apm-dc-configpack/keyfiles/cert.pem --from-file=./ibm-cloud-apm-dc-configpack/keyfiles/ca.pem --from-file=./ibm-cloud-apm-dc-configpack/keyfiles/key.pem
+		
+	kubectl create secret docker-registry pull-secret-hub --docker-username=ekey --docker-password=<MY ENTITLEMENT KEY> --docker-email=demo@ibm.com --docker-server=cp.icr.io -n cp4mcm-cloud-native-monitoring
+	```
 
 2. Create Teams
    
