@@ -102,16 +102,16 @@ You need at least one cluster with:
 	
 2. Create SLOs
   
-  ```bash
+	```bash
 	kubectl apply -f tools/apm/slo-synth-bookinfo.yaml	  	kubectl apply -f tools/apm/slo-synth-modresort.yaml
-  ```
+	```
 
 4. Create Policies
 	1. Event Policy KubeToy
 	   Resource Name contains kubetoy
 	   Assign Runbook
 	   
-	1. Incident Policy KubeToy
+	2. Incident Policy KubeToy
 	   Resource Name contains kubetoy
 	   Priority 1
 	   Add to Group SRE Team1 and Demo user
