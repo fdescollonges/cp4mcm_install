@@ -38,17 +38,17 @@ storageclass.kubernetes.io/is-default-class=true
 
 ### 1. Install CP4MCM Base
 
-	```bash
-	./10_install_cp4mcm.sh -t <MY_REGISTRY_TOKEN>
-	```
+```bash
+./10_install_cp4mcm.sh -t <MY_REGISTRY_TOKEN>
+```
 
 ### 2. Register HUB Cluster manually
 
 ### 3. Install CP4MCM additional modules, relaunch
 
-	```bash
-	./10_install_cp4mcm.sh -t <MY_REGISTRY_TOKEN>
-	```
+```bash
+./10_install_cp4mcm.sh -t <MY_REGISTRY_TOKEN>
+```
 
 
 
