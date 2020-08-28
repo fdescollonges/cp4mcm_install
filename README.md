@@ -36,15 +36,15 @@ storageclass.kubernetes.io/is-default-class=true
 ## Installing
 
 
-1. Install CP4MCM Base
+### 1. Install CP4MCM Base
 
 	```bash
 	./10_install_cp4mcm.sh -t <MY_REGISTRY_TOKEN>
 	```
 
-2. Register HUB Cluster manually
+### 2. Register HUB Cluster manually
 
-3. Install CP4MCM additional modules, relaunch
+### 3. Install CP4MCM additional modules, relaunch
 
 	```bash
 	./10_install_cp4mcm.sh -t <MY_REGISTRY_TOKEN>
@@ -52,7 +52,7 @@ storageclass.kubernetes.io/is-default-class=true
 
 
 
-4. Register other clusters
+### 4. Register other clusters
 
 	You need at least one cluster with:
 	
@@ -72,7 +72,7 @@ storageclass.kubernetes.io/is-default-class=true
 	5. Check that all Applications have been deployed to the Prod Cluster
 
 
-5. Monitoring
+### 5. Monitoring
   	1. Create DC
  	2. Execute on each cluster
   
@@ -126,7 +126,7 @@ storageclass.kubernetes.io/is-default-class=true
 
 
 
-5. Infrastructure Management
+### 6. Infrastructure Management
 
 	1. Register AWS, Google, ...
 	2. Enable Data collection
@@ -156,7 +156,7 @@ storageclass.kubernetes.io/is-default-class=true
 
 
 
-6. Service Management
+### 7. Service Management
 
 	1. Create connections
 	
@@ -170,7 +170,7 @@ storageclass.kubernetes.io/is-default-class=true
 
 
 
-6. Additional 
+### 8. Additional 
 
 	1. Virtual MAchine Discovery
 	  ```bash
@@ -181,7 +181,7 @@ storageclass.kubernetes.io/is-default-class=true
 
 
 
-7. DEMO
+### 9. DEMO
 
 	**On the PROD Cluster!**
 
