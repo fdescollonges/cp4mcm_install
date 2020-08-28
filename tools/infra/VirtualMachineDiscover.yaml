@@ -1,0 +1,29 @@
+apiVersion: infra.management.ibm.com/v1alpha1
+kind: VirtualMachineDiscover
+metadata:
+  name: ibm-mq-vms-amazon
+  namespace: management-infrastructure-management
+spec:
+  cfConnection:
+    name: imconnection
+  cfFilters:
+  - filter[]=vendor=amazon
+  virtualMachineTemplate:
+    metadata:
+      annotations:
+        infra.management.ibm.com/vmActionForDelete: ""
+---
+apiVersion: infra.management.ibm.com/v1alpha1
+kind: VirtualMachineDiscover
+metadata:
+  name: ibm-mq-vms-google
+  namespace: management-infrastructure-management
+spec:
+  cfConnection:
+    name: imconnection
+  cfFilters:
+  - filter[]=vendor=google
+  virtualMachineTemplate:
+    metadata:
+      annotations:
+        infra.management.ibm.com/vmActionForDelete: ""

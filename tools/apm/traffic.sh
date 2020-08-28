@@ -1,0 +1,1 @@
+while true; do wget http://modresort-app-web-route-modresort-app.demo-prod-a376efc1170b9b8ace6422196c51e491-0000.eu-de.containers.appdomain.cloud/resorts/; done

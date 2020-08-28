@@ -1,0 +1,179 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: modresort-app
+  namespace: modresort-app
+  generation: 1
+  labels:
+    app: modresort-app
+spec:
+  componentKinds:
+    - group: app.ibm.com
+      kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - modresort-app-web
+---
+
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: modresort-app-channel
+  namespace: modresort-app-ns
+  generation: 1
+  labels:
+    app: modresort-app
+spec:
+  sourceNamespaces:
+  - modresort-app-ns
+  type: Namespace
+  pathname: modresort-app-ns
+  gates:
+    annotations:
+      dev-ready: approved
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Subscription
+metadata:
+  name: modresort-app-web
+  namespace: modresort-app
+  generation: 1
+  labels:
+    app: modresort-app-web
+spec:
+  name: ''
+  channel: modresort-app-ns/modresort-app-channel
+  placement:
+    placementRef:
+      name: modresort-app-web-placement
+      kind: PlacementRule
+  packageFilter:
+    labelSelector:
+      matchLabels:
+        app: modresort-app-web
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: PlacementRule
+metadata:
+  name: modresort-app-web-placement
+  namespace: modresort-app
+  generation: 1
+  labels:
+    app: modresort-app-web
+spec:
+  clusterLabels:
+    matchLabels:
+      environment: Prod
+      region: EU
+  clusterReplicas: 1
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: modresort-app-web
+  namespace: modresort-app-ns
+  generation: 1
+  labels:
+    app: modresort-app-web
+spec:
+  template:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      name: modresort-app-web
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          run: modresort-app-web
+      template:
+        metadata:
+          labels:
+            run: modresort-app-web
+        spec:
+          containers:
+          - name: cmodresort-app-web
+            image: niklaushirt/modresort:1.0
+            env:
+            - name: MESSAGE_SERVICE_URL
+              value: "http://cloud-uni-message-service:8080/messages"
+            - name: CUSTOMER_SERVICE_URL
+              value: http://cloud-uni-customer-app:8080/customers
+            - name: ORDER_SERVICE_URL
+              value: http://cloud-uni-order-app:8080/orders
+---        
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: modresort-app-web-service
+  namespace: modresort-app-ns
+  generation: 1
+  labels:
+    app: modresort-app-web
+spec:
+  template:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: modresort-app-web-service
+    spec:
+      selector:
+        run: modresort-app-web
+      type: NodePort
+      ports:
+      - port: 9080
+        protocol: TCP
+        targetPort: 9080
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: modresort-app-web-route
+  namespace: modresort-app-ns
+  generation: 1
+  labels:
+    app: modresort-app-web
+spec:
+  template:
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: modresort-app-web
+      name: modresort-app-web-route
+    spec:
+      #host: modresort-app-web-service-modresort-app.apps.91.121.172.228.nip.io
+      to:
+        kind: Service
+        name: modresort-app-web-service
+        weight: 100
+      wildcardPolicy: None
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: modresort-app-web-ingress
+  namespace: modresort-app-ns
+  generation: 1
+  labels:
+    app: modresort-app-web
+spec:
+  template:
+    apiVersion: networking.k8s.io/v1beta1
+    kind: Ingress
+    metadata:
+      name: modresort-app-web-ingress
+      labels:
+        app: modresort-app-web
+    spec:
+      rules:
+      - http:
+          paths:
+            - path: /resort
+              backend:
+                serviceName:  modresort-app-web-service
+                servicePort: 9080

@@ -1,0 +1,52 @@
+---
+- MiqReport:
+    title: VM Trends CPU
+    rpt_group: Custom
+    rpt_type: Custom
+    priority:
+    db: VimPerformanceTrend
+    cols: []
+    include: {}
+    col_order: []
+    headers: []
+    conditions:
+    order: Ascending
+    sortby:
+    - resource_name
+    group:
+    graph:
+    dims:
+    filename:
+    file_mtime:
+    categories: []
+    timeline:
+    template_type: report
+    where_clause:
+    db_options:
+      :rpt_type: trend
+      :interval: daily
+      :end_offset: 0
+      :start_offset: 604800
+      :trend_db: VmPerformance
+      :trend_col: max_cpu_usage_rate_average
+      :limit_val: 100
+      :target_pcts:
+      - 50
+      - 75
+      - 100
+    generate_cols:
+    generate_rows:
+    col_formats: []
+    tz: UTC
+    time_profile_id: 1
+    display_filter:
+    col_options: {}
+    rpt_options:
+      :pdf:
+        :page_size: US-Letter
+      :queue_timeout:
+    miq_group_id: 21
+    user_id: 3
+    menu_name: VM Trends CPU
+    userid: nik@ibm.com
+    group_description: demo

@@ -1,0 +1,25 @@
+apiVersion: ibmcloudappmgmt.com/v1alpha1
+kind: K8sDC
+metadata:
+  name: k8sdc-cr
+  namespace: cp4mcm-cloud-native-monitoring
+spec:
+  ibmAgentConfigSecret: dc-secret
+  imagePullSecrets:
+    - name: pull-secret-hub
+  collectEvents: 'on'
+  global:
+    environmentSize: size0
+    imagePullPolicy: IfNotPresent
+  clusterName: mcm-hub
+  ibmAgentHTTPSSecret: ibm-agent-https-secret
+  rbac:
+    create: true
+  arch: ''
+  imageNamePrefix: ''
+  collectMetrics: 'on'
+  collectResources: 'on'
+  image:
+    repository: cp.icr.io/cp/app-mgmt
+    useTag: true
+  replicas: 1

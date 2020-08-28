@@ -1,0 +1,109 @@
+apiVersion: declarativemonitoring.management.ibm.com/v1alpha1
+kind: SyntheticBundle
+metadata:
+  name: bookinfo-synthetic
+  namespace: bookinfo-project
+spec:
+  applicationRef:
+    name: bookinfo-app
+  ingressRef:
+    name: bookinfo-productpage-route
+    type: route
+  interval: 1m
+  #locations:
+  #  - Geneva
+  tests:
+    - configuration:
+        url: /productpage
+      syntheticType: HTTP
+      testName: Home page
+      threshold:
+        consecutiveFailed: 2
+        consecutiveSlow: 2
+        criticalThreshold: 25ms
+        warningThreshold: 10ms
+    - configuration:
+        url: /api/v1/products
+      testName: productapi
+      threshold:
+        consecutiveFailed: 2
+        consecutiveSlow: 2
+        criticalThreshold: 25ms
+        warningThreshold: 10ms
+---
+apiVersion: declarativemonitoring.management.ibm.com/v1alpha1
+kind: SloBundle
+metadata:
+  name: bookinfo-slos-hour
+  namespace: bookinfo-project
+  labels:
+    app: bookinfo
+spec:
+  slos:
+    - name: SLO-Hourly-HomePage
+      objective:
+        measurementWindow: 1h
+        target: 99%
+      sli:
+        measurementType: latency
+        metricFilter:
+          url: /productpage
+        threshold:
+          max: 200ms
+  syntheticRef:
+    name: bookinfo-synthetic
+---
+apiVersion: declarativemonitoring.management.ibm.com/v1alpha1
+kind: SloBundle
+metadata:
+  name: bookinfo-slos-week
+  namespace: bookinfo-project
+  labels:
+    app: bookinfo
+spec:
+  slos:
+    - name: SLO-Weekly-HomePage
+      objective:
+        measurementWindow: 167h
+        target: 99%
+      sli:
+        measurementType: latency
+        metricFilter:
+          url: /productpage
+        threshold:
+          max: 200ms
+  syntheticRef:
+    name: bookinfo-synthetic-weekly
+---
+apiVersion: declarativemonitoring.management.ibm.com/v1alpha1
+kind: SyntheticBundle
+metadata:
+  name: bookinfo-synthetic-weekly
+  namespace: bookinfo-project
+spec:
+  applicationRef:
+    name: bookinfo-app
+  ingressRef:
+    name: bookinfo-productpage-route
+    type: route
+  interval: 1m
+  #locations:
+  #  - Geneva
+  tests:
+    - configuration:
+        url: /productpage
+      syntheticType: HTTP
+      testName: Home page
+      threshold:
+        consecutiveFailed: 2
+        consecutiveSlow: 2
+        criticalThreshold: 25ms
+        warningThreshold: 10ms
+    - configuration:
+        url: /api/v1/products
+      testName: productapi
+      threshold:
+        consecutiveFailed: 2
+        consecutiveSlow: 2
+        criticalThreshold: 25ms
+        warningThreshold: 10ms

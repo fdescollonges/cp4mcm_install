@@ -1,0 +1,398 @@
+apiVersion: sretooling.management.ibm.com/v1alpha1
+kind: Chatops
+metadata:
+  name: chatops
+  namespace: management-operations
+spec:
+  license: true
+  etcd-operator:
+    backupOperator:
+      name: etcd-backup-operator
+      replicaCount: 1
+    customResources:
+      createEtcdClusterCRD: true
+    deployments:
+      backupOperator: false
+      restoreOperator: false
+    enableTLS: false
+    enabled: true
+    etcdCluster:
+      name: etcd-cluster
+      size: 3
+      version: 3.2.25
+    etcdOperator:
+      name: etcd-operator
+      replicaCount: 1
+    restoreOperator:
+      name: etcd-restore-operator
+      replicaCount: 1
+  st2timersengine:
+    affinity: {}
+    nodeSelector: {}
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  enterprise:
+    enabled: false
+    license: true
+  global:
+    st2timersengine:
+      image:
+        digest: >-
+          sha256:855f0e7396ab1d2fa68bb2520f314693b5bf7d1bf4a1613f0e941195f2449448
+        name: st2timersengine-ubi8
+        tag: 3.2.0
+    imagePullSecrets:
+      - name: ibm-management-pull-secret
+    st2web:
+      image:
+        digest: >-
+          sha256:c2407242119004981b9186baefb712ec6f21cc89aa2b2e11795344d71c04aad9
+        name: st2web-ubi8
+        tag: 3.2.0
+    digest:
+      enabled: true
+    imageRepository: >-
+      hyc-cp4mcm-team-docker-local.artifactory.swg-devops.com/sre-chatops/stackstorm
+    mongodb_ha:
+      copyConfigImage:
+        image:
+          digest: >-
+            sha256:511bb4677fd8842ac0b2323b71568bd1e7c32475e48439b0d74ec30460bc20e5
+          name: ubi8/ubi-minimal
+          tag: 8.2
+        pullPolicy: IfNotPresent
+      image:
+        image:
+          digest: >-
+            sha256:60ea217d0dd8638d4fec747d5e88bb1b45519896bb991a22a602c6d350a16b1f
+          name: ibmcom/ibm-mongodb-ubi7
+          tag: 4.0.12
+        pullPolicy: IfNotPresent
+      installImage:
+        image:
+          digest: >-
+            sha256:50fafd8fa20b94780a0209375f43f6acf40bf0bcc116aa8575bb8f9dcbd55657
+          name: ibmcom/ibm-mongodb-install
+          tag: 3.3.1
+        pullPolicy: IfNotPresent
+      repository: hyc-cp4mcm-team-docker-local.artifactory.swg-devops.com/sre-chatops
+    st2rulesengine:
+      image:
+        digest: >-
+          sha256:54154929d2b79cadfa0808140cc168065d73d269d08f0a2f59aa3e5ba4fa7ab9
+        name: st2rulesengine-ubi8
+        tag: 3.2.0
+    st2chatops:
+      image:
+        digest: >-
+          sha256:41b985dd04183ff71e4e4f8ef3bf6d000d079c1e68e6fc0174ea847ffd79ba39
+        name: st2chatops-ubi8
+        tag: 3.2.0
+    st2api:
+      image:
+        digest: >-
+          sha256:ea7ecdad6448e41b08bf734a61a9f65fedfdd0c6042af67f0bcfe343d5088cd3
+        name: st2api-ubi8
+        tag: 3.2.0
+    st2garbagecollector:
+      image:
+        digest: >-
+          sha256:cb4534719fb6c8a4b2e10d6a5022e6c3ee19152aaca9006daa13c938a064e9c6
+        name: st2garbagecollector-ubi8
+        tag: 3.2.0
+    st2scheduler:
+      image:
+        digest: >-
+          sha256:7ec3c582108066fa4444a1fc5a28ceb3be7172f69ed0c26281371060ed329427
+        name: st2scheduler-ubi8
+        tag: 3.2.0
+    etcdCluster:
+      image:
+        digest: >-
+          sha256:7970a8afd96d93e1ab02a4ef1b7971d9234efb4b9f070c8ff7a4abb1d0cca3cc
+        name: quay.io/coreos/etcd
+        pullPolicy: IfNotPresent
+        repository: hyc-cp4mcm-team-docker-local.artifactory.swg-devops.com/sre-chatops
+        tag: 3.2.25-20200715
+      name: etcd-cluster
+      size: 3
+      version: 3.2.25
+    case_bundle:
+      enabled: true
+    st2stream:
+      image:
+        digest: >-
+          sha256:89f0565537dc5e20b1e7c91314ef298a145d575d3d5dae5ce068cc7a6079e15c
+        name: st2stream-ubi8
+        tag: 3.2.0
+    st2workflowengine:
+      image:
+        digest: >-
+          sha256:3db352ef73f1254c9587f580d795a93acfadd012776f360032eac486d9402c46
+        name: st2workflowengine-ubi8
+        tag: 3.2.0
+    st2resultstracker:
+      image:
+        digest: >-
+          sha256:6dc94ef0367280233037f66dfdd7269c16290a28d11ee6a03fab4b8bc66419aa
+        name: st2resultstracker-ubi8
+        tag: 3.2.0
+    etcdOperator:
+      image:
+        digest: >-
+          sha256:7d2e6b83178807799202f0823f2caa58f05f0fc79325dbdbd7724bd7f6f405da
+        name: quay.io/coreos/etcd-operator
+        pullPolicy: IfNotPresent
+        tag: 0.9.4
+      name: etcd-operator
+      replicaCount: 1
+      repository: hyc-cp4mcm-team-docker-local.artifactory.swg-devops.com/sre-chatops
+    st2sensorcontainer:
+      image:
+        digest: >-
+          sha256:e9400e3fc487cb27d2eb7d6ba8848e242895dc97f51c8daec2a3d4d938d196c8
+        name: st2sensorcontainer-ubi8
+        tag: 3.2.0
+    st2actionrunner:
+      image:
+        digest: >-
+          sha256:1ff6dabc7f7d80dbc86dffad8d030b27fb325bef162453171b585bd711ccae0c
+        name: st2actionrunner-ubi8
+        tag: 3.2.0
+    st2notifier:
+      image:
+        digest: >-
+          sha256:b421b55dc0b928659e846f1b289105f84e3c5d38be317485a0ca089f17276322
+        name: st2notifier-ubi8
+        tag: 3.2.0
+    st2auth:
+      image:
+        digest: >-
+          sha256:e78e2ae5dbe71a08059d3549e08018e2cdec4452fa16009434be1423635b9808
+        name: st2auth-ubi8
+        tag: 3.2.0
+    rabbitmq_ha:
+      busyboxImage:
+        image:
+          digest: >-
+            sha256:511bb4677fd8842ac0b2323b71568bd1e7c32475e48439b0d74ec30460bc20e5
+          name: ubi8/ubi-minimal
+          tag: 8.2
+        pullPolicy: IfNotPresent
+      image:
+        image:
+          digest: >-
+            sha256:e44b9eb67a2b07caf410cd7946a57abcc650c6ad1581e76a2af51c5d6cec6f3a
+          name: stackstorm/rabbitmq-ubi
+          tag: 3.8.0-20200716
+        pullPolicy: IfNotPresent
+      repository: hyc-cp4mcm-team-docker-local.artifactory.swg-devops.com/sre-chatops
+  secrets:
+    st2: null
+  st2web:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources:
+      limits:
+        memory: 100Mi
+      requests:
+        cpu: 50m
+        memory: 25Mi
+    service:
+      annotations: {}
+      hostname: ''
+      type: ClusterIP
+    serviceAccount:
+      attach: false
+    tolerations: []
+  mongodb-replicaset:
+    persistentVolume:
+      enabled: true
+      storageClass: '-'
+  external-dns:
+    aws:
+      zoneType: public
+    domainFilters: []
+    enabled: false
+  rabbitmq-ha:
+    definitions:
+      policies: >-
+        {"vhost":"/","name":"ha","pattern":"",
+        "definition":{"ha-mode":"all","ha-sync-mode":"automatic","ha-sync-batch-size":10}}
+    enabled: true
+    persistentVolume:
+      enabled: false
+      storageClass: '-'
+    rabbitmqVhost: /
+    resources: {}
+  st2rulesengine:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  st2chatops:
+    affinity: {}
+    enabled: true
+    env:
+      HUBOT_ADAPTER: slack
+    image: {}
+    nodeSelector: {}
+    resources:
+      requests:
+        cpu: 5m
+        memory: 50Mi
+    serviceAccount:
+      attach: false
+    tolerations: []
+  st2api:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  st2garbagecollector:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  st2scheduler:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  st2stream:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  st2:
+    config: |
+      [api]
+      allow_origin = '*'
+      [system]
+      debug = False
+    keyvalue: null
+    packs:
+      configs:
+        core.yaml: |
+          ---
+          # example core pack config yaml
+      image:
+        digest: >-
+          sha256:1214492b5ceb5c846b5016de3ebf662050265fc4631b5f36b0d88f05b589a11f
+        name: st2pack
+        pullPolicy: IfNotPresent
+        repository: PLACE_HOLDER_FOR_IF_CONDITION
+        tag: 3.2.0
+      sensors:
+        - nodeSelector: {}
+          annotations: {}
+          resources: {}
+          readinessProbe: {}
+          affinity: {}
+          name: null
+          livenessProbe: {}
+          serviceAccount:
+            attach: false
+          tolerations: []
+  st2workflowengine:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  mongodb-ha:
+    auth:
+      enabled: true
+    copyConfigImage:
+      pullPolicy: IfNotPresent
+    enabled: true
+    image:
+      pullPolicy: IfNotPresent
+    installImage:
+      pullPolicy: IfNotPresent
+    persistentVolume:
+      enabled: false
+      storageClass: '-'
+  ingress:
+    annotations: {}
+    enabled: false
+    hosts: []
+    tls: []
+  st2actionrunner:
+    affinity: {}
+    annotations: {}
+    hostAliases: []
+    nodeSelector: {}
+    replicas: 5
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  st2notifier:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  openshift:
+    enabled: true
+    rbac:
+      assignments:
+        st2admin.yaml: |
+          ---
+          username: st2admin
+          roles:
+            - system_admin
+        stanley.yaml: |
+          ---
+          username: stanley
+          roles:
+            - admin
+      mappings: null
+      roles:
+        sample.yaml: >
+          # sample RBAC role file, see
+          https://docs.stackstorm.com/rbac.html#defining-roles-and-permission-grants
+
+          ---
+
+          name: "sample"
+
+          description: "Example Role which contains no permission grants and
+          serves for demonstration purposes"
+  serviceAccount:
+    create: true
+    serviceAccountAnnotations: {}
+    serviceAccountName: chatops-sa
+  st2auth:
+    affinity: {}
+    nodeSelector: {}
+    replicas: 2
+    resources: {}
+    serviceAccount:
+      attach: false
+    tolerations: []
+  image:
+    pullPolicy: IfNotPresent

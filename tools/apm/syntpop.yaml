@@ -1,0 +1,169 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: monitoring-synthetic-pop-agent-new
+  namespace: management-monitoring
+  labels:
+    app: synthetic1
+    chart: synthetic
+    component: synthetic-pop-agent
+    heritage: Tiller
+    release: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: synthetic1
+      component: synthetic-pop-agent
+      release: monitoring
+  template:
+    metadata:
+      labels:
+        app: synthetic1
+        chart: synthetic
+        component: synthetic-pop-agent
+        heritage: Tiller
+        release: monitoring
+      annotations:
+        productID: 7edfd8e411794d70af341cfa86fe5fc8
+        productName: IBM Cloud App Management Advanced
+        productVersion: 2019.4.0
+    spec:
+      restartPolicy: Always
+      serviceAccountName: default
+      imagePullSecrets:
+        - name: ibm-management-pull-secret
+      schedulerName: default-scheduler
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+              - matchExpressions:
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - ppc64le
+              - matchExpressions:
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - s390x
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+        - resources:
+            limits:
+              cpu: 900m
+              memory: 250Mi
+            requests:
+              cpu: 100m
+              memory: 150Mi
+          readinessProbe:
+            exec:
+              command:
+                - cat
+                - /opt/ibm/apm/agent/agent.readiness
+            initialDelaySeconds: 120
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          name: synthetic-agent
+          livenessProbe:
+            exec:
+              command:
+                - /opt/ibm/apm/agent/synthetic-agent.sh
+                - health
+            initialDelaySeconds: 240
+            timeoutSeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            - name: LOCATION
+              value: >-
+                LocalPOP1,Switzerland,Geneva,46.20,6.14,Synth PoP for all protocols
+            - name: IRA_API_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: monitoring-admintenants
+                  key: serviceProviderID
+            - name: OPENTT_SERVICE_URL
+              value: 'http://monitoring-opentt-collector:14268/api/traces'
+            - name: SYNTHETIC_REST_URL
+              value: 'http://monitoring-synthetic:9081/synthetic/1.0/synthetic_tests'
+            - name: PLAYBACK_CAPABILITIES
+              value: syntheticType=HTTP,HTTPScript,SeleniumLoad,SeleniumScript,SOAP; browserType=firefox
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: monitoring-cem-ibm-redis-cred-secret
+                  key: password
+                  optional: false
+            - name: HTTP_PLAYBACK_URL
+              value: >-
+                redis://monitoring-ibm-redis-master-svc:6379/0?ConfigurationQueue=HttpPlaybackConfigQueue&AARQueue=AARQueue
+            - name: SELENIUMLOAD_PLAYBACK_URL
+              value: >-
+                redis://monitoring-ibm-redis-master-svc:6379/0?ConfigurationQueue=ConfigurationQueue&AARQueue=AARQueue&ImageQueue=ImageQueue
+            - name: SELENIUMSCRIPT_PLAYBACK_URL
+              value: >-
+                redis://monitoring-ibm-redis-master-svc:6379/0?ConfigurationQueue=ConfigurationQueue&AARQueue=AARQueue&ImageQueue=ImageQueue
+            - name: HTTPSCRIPT_PLAYBACK_URL
+              value: >-
+                redis://monitoring-ibm-redis-master-svc:6379/0?ConfigurationQueue=HttpScriptPlaybackConfigQueue&AARQueue=AARQueue
+            - name: SOAP_PLAYBACK_URL
+              value: >-
+                redis://monitoring-ibm-redis-master-svc:6379/0?ConfigurationQueue=HttpScriptPlaybackConfigQueue&AARQueue=AARQueue
+            - name: TRACE_LEVEL
+              value: INFO
+            - name: JVM_ARGS
+              value: '-Xms50M -Xmx100M'
+            - name: APPLICATIONMGMT_SERVICE_URL
+              value: 'http://monitoring-applicationmgmt:80/applicationmgmt/0.9'
+            - name: METRIC_SERVICE_URL
+              value: 'http://monitoring-metric:9080/metric'
+            - name: PUBLISHAAR_THREAD_POOL_SIZE
+              value: '5'
+            - name: AGENT_PROXY_SERVER
+            - name: CACHE_REDIS_MAX_SIZE_MB
+            - name: HEALTH_QUEUE
+              value: HealthQueue
+            - name: HEALTH_COLLECT_PERIOD
+              value: '5'
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsUser: 1000
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: logs
+              mountPath: /opt/ibm/apm/agent/logs
+          terminationMessagePolicy: File
+          image: >-
+            cp.icr.io/cp/cp4mcm/synthetic-agent@sha256:c89ebd794dc97a557e56b5d7d9eeefde99bb48ec16f0cf79a2d2ddba93ef6d40
+      serviceAccount: default
+      volumes:
+        - name: logs
+          emptyDir: {}
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

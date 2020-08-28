@@ -1,0 +1,27 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: turbonomic
+spec:
+  to:
+    kind: Service
+    name: api
+  port:
+    targetPort: http-api
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: turbonomic-targets
+spec:
+  to:
+    kind: Service
+    name: topology-processor
+  port:
+    targetPort: http-topology-processor
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge

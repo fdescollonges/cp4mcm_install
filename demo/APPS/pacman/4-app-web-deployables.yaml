@@ -1,0 +1,197 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: pacman-clusterrolebinding
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  template:    
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: pacman
+      namespace: pacman 
+    subjects:
+    - kind: ServiceAccount 
+      name: pacman
+      namespace: pacman
+    roleRef:
+      kind: ClusterRole
+      name: pacman 
+      apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: pacman-serviceaccount
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  template: 
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: pacman 
+      namespace: pacman
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: pacman-clusterrole
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  template: 
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      name: pacman
+    rules:
+    - apiGroups: [""]
+      resources: ["pods","nodes"]
+      verbs: ["get", "watch", "list"]
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: pacman-deployment
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  template: 
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        name: pacman
+      name: pacman
+      namespace: pacman
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          name: pacman
+      template:
+        metadata:
+          labels:
+            name: pacman
+        spec:
+          serviceAccount: pacman
+          containers:
+          - image: niklaushirt/pacman-nodejs-app:1.0.0
+            name: pacman
+            ports:
+            - containerPort: 8080
+            env:
+            - name: MONGO_SERVICE_HOST
+              # Single member MongoDB
+              # value: primarymongohere
+              # Replicaset (federated) MongoDB
+              value: replicamembershere
+              # Comment out MONGO_REPLICA_SET for the single-member Mongo
+            - name: MONGO_REPLICA_SET
+              value: rs0
+            - name: MONGO_AUTH_USER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: mongodb-users-secret
+            - name: MONGO_AUTH_PWD
+              valueFrom:
+                secretKeyRef:
+                  key: database-password
+                  name: mongodb-users-secret
+            - name: MONGO_DATABASE
+              value: pacman
+            - name: MY_MONGO_PORT
+              value: "443"
+            - name: MONGO_USE_SSL
+              value: "true"
+            - name: MONGO_VALIDATE_SSL
+              value: "false"
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: pacman-service
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  template: 
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        name: pacman
+      name: pacman
+      namespace: pacman 
+    spec:
+      ports:
+      - port: 8080
+        protocol: TCP
+        targetPort: 8080
+      selector:
+        name: pacman
+      sessionAffinity: None
+      type: NodePort
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: pacman-route
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  template: 
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: pacman
+      namespace: pacman
+    spec:
+      port:
+        targetPort: 8080
+      to:
+        kind: Service
+        name: pacman
+        weight: 100
+---
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: pacman-secret
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  template: 
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: mongodb-users-secret
+      namespace: pacman
+    type: Opaque 
+    data:
+      database-admin-password: Y2x5ZGU=
+      database-name: cGFjbWFu
+      database-password: cGlua3k=
+      database-user: Ymxpbmt5
+      keyfile-value: cjNkaDR0Cg==
+

@@ -1,0 +1,15 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: management-installer-index
+  namespace: openshift-marketplace
+spec:
+  displayName: CP4MCM Installer Catalog
+  publisher: IBM CP4MCM
+  sourceType: grpc
+  image: quay.io/cp4mcm/cp4mcm-orchestrator-catalog:2.0.0
+  updateStrategy:
+    registryPoll:
+      interval: 45m
+  secrets:
+   - ibm-management-pull-secret

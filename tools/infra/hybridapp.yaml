@@ -1,0 +1,279 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: hybrid-compose
+  namespace: default
+spec:
+  componentKinds:
+    - group: core.hybridapp.io
+      kind: Deployable
+  descriptor: {}
+  selector:
+    matchLabels:
+      tools.hybridapp.io/application-hybriddemo: hybriddemo
+---
+apiVersion: core.hybridapp.io/v1alpha1
+kind: Deployable
+metadata:
+  name: deployment-default-kubetoy-deployment
+  namespace: default
+  generation: 2
+  labels:
+    tools.hybridapp.io/application-29a04ffd-7abc-4c73-bb07-7b478454fd98: 29a04ffd-7abc-4c73-bb07-7b478454fd98
+    tools.hybridapp.io/application-hybriddemo: hybriddemo
+spec:
+  hybridtemplates:
+    - deployerType: kubernetes
+      template:
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: kubetoy-deployment
+          namespace: default
+          labels:
+            app: kubetoy-app
+            core.hybridapp.io/hosting-hybriddeployable: deployment-default-kubetoy-deployment
+        spec:
+          progressDeadlineSeconds: 600
+          replicas: 1
+          revisionHistoryLimit: 10
+          selector:
+            matchLabels:
+              app: kubetoy
+          strategy:
+            rollingUpdate:
+              maxSurge: 25%
+              maxUnavailable: 25%
+            type: RollingUpdate
+          template:
+            metadata:
+              labels:
+                app: kubetoy
+            spec:
+              containers:
+                - name: kubetoy
+                  env:
+                    - name: ENV_TOY_CONFIGMAP
+                      valueFrom:
+                        configMapKeyRef:
+                          name: kubetoy-configmap-env
+                          key: ENV_TOY_CONFIGMAP
+                    - name: ENV_TOY_SECRET
+                      valueFrom:
+                        secretKeyRef:
+                          name: kubetoy-secret-env
+                          key: ENV_TOY_SECRET
+                  image: 'docker.io/ibmicpcoc/kubetoy:latest'
+                  imagePullPolicy: IfNotPresent
+                  ports:
+                    - containerPort: 3000
+                      protocol: TCP
+                  resources:
+                    limits:
+                      cpu: '1'
+                      memory: 128Mi
+                    requests:
+                      cpu: 250m
+                      memory: 64Mi
+                  terminationMessagePath: /dev/termination-log
+                  terminationMessagePolicy: File
+                  volumeMounts:
+                    - name: configvol
+                      mountPath: /var/config
+                    - name: secretvol
+                      mountPath: /var/secret
+              dnsPolicy: ClusterFirst
+              restartPolicy: Always
+              schedulerName: default-scheduler
+              securityContext: {}
+              terminationGracePeriodSeconds: 30
+              volumes:
+                - name: configvol
+                  configMap:
+                    name: kubetoy-configmap-files
+                    defaultMode: 420
+                - name: secretvol
+                  secret:
+                    defaultMode: 420
+                    secretName: kubetoy-secret-files
+  placement:
+    deployers:
+      - namespace: default
+---
+apiVersion: core.hybridapp.io/v1alpha1
+kind: Deployable
+metadata:
+  name: service-default-kubetoy-service
+  namespace: default
+  generation: 2
+  labels:
+    tools.hybridapp.io/application-29a04ffd-7abc-4c73-bb07-7b478454fd98: 29a04ffd-7abc-4c73-bb07-7b478454fd98
+    tools.hybridapp.io/application-hybriddemo: hybriddemo
+spec:
+  hybridtemplates:
+    - deployerType: kubernetes
+      template:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: kubetoy-service
+          namespace: default
+          labels:
+            app: kubetoy-app
+            core.hybridapp.io/hosting-hybriddeployable: service-default-kubetoy-service
+        spec:
+          clusterIP: 172.21.200.214
+          ports:
+            - name: http
+              port: 3000
+              protocol: TCP
+              targetPort: 3000
+          selector:
+            app: kubetoy
+          sessionAffinity: None
+          type: ClusterIP
+  placement:
+    deployers:
+      - namespace: default
+---
+apiVersion: core.hybridapp.io/v1alpha1
+kind: Deployable
+metadata:
+  name: virtualmachine-default-cfvmid-5
+  namespace: default
+  generation: 1
+  labels:
+    tools.hybridapp.io/application-hybriddemo: hybriddemo
+spec:
+  hybridtemplates:
+    - deployerType: ibminfra
+      template:
+        apiVersion: infra.management.ibm.com/v1alpha1
+        kind: VirtualMachine
+        metadata:
+          name: cfvmid-5
+          namespace: default
+          finalizers:
+            - virtualmachine.infra.management.ibm.com
+        spec:
+          cfConnection:
+            name: ''
+          vmid: '5'
+  placement:
+    deployers:
+      - name: ibminfra
+        namespace: management-infrastructure-management
+---
+apiVersion: core.hybridapp.io/v1alpha1
+kind: Deployable
+metadata:
+  name: virtualmachine-default-cfvmid-6
+  namespace: default
+  generation: 1
+  labels:
+    tools.hybridapp.io/application-hybriddemo: hybriddemo
+spec:
+  hybridtemplates:
+    - deployerType: ibminfra
+      template:
+        apiVersion: infra.management.ibm.com/v1alpha1
+        kind: VirtualMachine
+        metadata:
+          name: cfvmid-6
+          namespace: default
+          finalizers:
+            - virtualmachine.infra.management.ibm.com
+        spec:
+          cfConnection:
+            name: ''
+          vmid: '6'
+  placement:
+    deployers:
+      - name: ibminfra
+        namespace: management-infrastructure-management
+---
+apiVersion: core.hybridapp.io/v1alpha1
+kind: Deployable
+metadata:
+  name: virtualmachine-default-cfvmid-7
+  namespace: default
+  generation: 1
+  labels:
+    tools.hybridapp.io/application-hybriddemo: hybriddemo
+spec:
+  hybridtemplates:
+    - deployerType: ibminfra
+      template:
+        apiVersion: infra.management.ibm.com/v1alpha1
+        kind: VirtualMachine
+        metadata:
+          name: cfvmid-7
+          namespace: default
+          finalizers:
+            - virtualmachine.infra.management.ibm.com
+        spec:
+          cfConnection:
+            name: ''
+          vmid: '7'
+  placement:
+    deployers:
+      - name: ibminfra
+        namespace: management-infrastructure-management
+---
+apiVersion: core.hybridapp.io/v1alpha1
+kind: Deployable
+metadata:
+  name: virtualmachine-default-cfvmid-8
+  namespace: default
+  generation: 1
+  labels:
+    tools.hybridapp.io/application-hybriddemo: hybriddemo
+spec:
+  hybridtemplates:
+    - deployerType: ibminfra
+      template:
+        apiVersion: infra.management.ibm.com/v1alpha1
+        kind: VirtualMachine
+        metadata:
+          name: cfvmid-8
+          namespace: default
+          finalizers:
+            - virtualmachine.infra.management.ibm.com
+        spec:
+          cfConnection:
+            name: ''
+          vmid: '8'
+  placement:
+    deployers:
+      - name: ibminfra
+        namespace: management-infrastructure-management
+---
+apiVersion: core.hybridapp.io/v1alpha1
+kind: Deployable
+metadata:
+  name: virtualmachine-default-new-1
+  namespace: default
+  generation: 1
+  labels:
+    tools.hybridapp.io/application-hybriddemo: hybriddemo
+spec:
+  hybridtemplates:
+    - deployerType: ibminfra
+      template:
+        apiVersion: infra.management.ibm.com/v1alpha1
+        kind: VirtualMachine
+        metadata:
+          name: newvm-1
+          namespace: default
+          finalizers:
+            - virtualmachine.infra.management.ibm.com
+        spec:
+          cfConnection:
+            name: ''
+          vmid: '10'
+  placement:
+    deployers:
+      - name: ibminfra
+        namespace: management-infrastructure-management
+
+

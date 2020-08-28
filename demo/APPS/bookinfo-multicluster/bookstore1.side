@@ -1,0 +1,186 @@
+{
+  "id": "b48a391b-260e-471c-a051-46f58ed096c3",
+  "version": "2.0",
+  "name": "bookstore",
+  "url": "http://bookinfo-productpage-route-bookinfo.demo-prod-a376efc1170b9b8ace6422196c51e491-0000.eu-de.containers.appdomain.cloud",
+  "tests": [{
+    "id": "db63e523-6e28-4ada-9486-5fde7f2d4788",
+    "name": "bookinfo-login",
+    "commands": [{
+      "id": "1dd1b46d-346e-4f2d-898b-bac5c4ca0c3e",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4f1cbdb7-6434-44c4-8889-dd1e05dc3e61",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1461x1008",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "85de05b0-057d-4998-a58c-f026a602e8dc",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Normal user",
+      "targets": [
+        ["linkText=Normal user", "linkText"],
+        ["css=p:nth-child(8) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Normal user')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/productpage?u=normal')]", "xpath:href"],
+        ["xpath=//a", "xpath:position"],
+        ["xpath=//a[contains(.,'Normal user')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "adf9c184-8ca6-41b7-a950-a7038bb23083",
+      "comment": "",
+      "command": "click",
+      "target": "css=blockquote:nth-child(2) > p:nth-child(1)",
+      "targets": [
+        ["css=blockquote:nth-child(2) > p:nth-child(1)", "css:finder"],
+        ["xpath=//blockquote/p", "xpath:position"],
+        ["xpath=//p[contains(.,'An extremely entertaining play by Shakespeare. The slapstick humour is refreshing!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a20270fa-9b15-4d72-bcf0-a04d6bf57dcf",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=blockquote:nth-child(2) > p:nth-child(1)",
+      "targets": [
+        ["css=blockquote:nth-child(2) > p:nth-child(1)", "css:finder"],
+        ["xpath=//blockquote/p", "xpath:position"],
+        ["xpath=//p[contains(.,'An extremely entertaining play by Shakespeare. The slapstick humour is refreshing!')]", "xpath:innerText"]
+      ],
+      "value": "An extremely entertaining play by Shakespeare. The slapstick humour is refreshing!"
+    }, {
+      "id": "a89da34b-5bbc-4f5f-b8bf-a6b068411d4f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.navbar-btn",
+      "targets": [
+        ["css=.navbar-btn", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "73654e32-4b9a-43f0-8e23-b8301874f1f2",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.navbar-btn",
+      "targets": [
+        ["css=.navbar-btn", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7641e3eb-b77c-4f3d-806b-fb2d458e0fd2",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.navbar-btn",
+      "targets": [
+        ["css=.navbar-btn", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4def2e0d-a850-46d8-b825-d27f050c2f80",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div[@id='login-modal']/div/div/div[2]/form/p/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "test"
+    }, {
+      "id": "460c0cc4-17b8-4b3c-9790-d7971e05bf00",
+      "comment": "",
+      "command": "type",
+      "target": "name=passwd",
+      "targets": [
+        ["name=passwd", "name"],
+        ["css=p:nth-child(2) > .form-control", "css:finder"],
+        ["xpath=//input[@name='passwd']", "xpath:attributes"],
+        ["xpath=//div[@id='login-modal']/div/div/div[2]/form/p[2]/input", "xpath:idRelative"],
+        ["xpath=//p[2]/input", "xpath:position"]
+      ],
+      "value": "test"
+    }, {
+      "id": "0bb430fc-4d3d-40ac-b06c-b04e66fd165a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn-primary",
+      "targets": [
+        ["css=.btn-primary", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='login-modal']/div/div/div[2]/form/p[3]/button", "xpath:idRelative"],
+        ["xpath=//p[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Sign in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "765ea2ef-1900-41e8-91eb-53ee41dd288c",
+      "comment": "",
+      "command": "click",
+      "target": "css=.navbar",
+      "targets": [
+        ["css=.navbar", "css:finder"],
+        ["xpath=//nav", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2ce6bf1e-3c60-46d6-b3a7-cd1338a8c23f",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=span",
+      "targets": [
+        ["css=span", "css:finder"],
+        ["xpath=//span", "xpath:position"],
+        ["xpath=//span[contains(.,'test ( sign out )')]", "xpath:innerText"]
+      ],
+      "value": "test ( sign out )"
+    }, {
+      "id": "1dcb7424-7fb6-472b-99ad-e1afbdac65ad",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=sign out",
+      "targets": [
+        ["linkText=sign out", "linkText"],
+        ["css=span > a", "css:finder"],
+        ["xpath=//a[contains(text(),'sign out')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'logout')]", "xpath:href"],
+        ["xpath=//span/a", "xpath:position"],
+        ["xpath=//a[contains(.,'sign out')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "355fdffd-21a6-4cdb-a942-5562c33f5c43",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "5c1fa326-11c1-439c-b09c-fa0c40c17110",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["db63e523-6e28-4ada-9486-5fde7f2d4788"]
+  }],
+  "urls": ["http://bookinfo-productpage-route-bookinfo.demo-prod-a376efc1170b9b8ace6422196c51e491-0000.eu-de.containers.appdomain.cloud/"],
+  "plugins": []
+}

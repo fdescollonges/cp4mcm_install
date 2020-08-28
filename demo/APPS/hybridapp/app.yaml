@@ -1,0 +1,16 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: test
+  namespace: default
+spec:
+  componentKinds:
+    - group: core.hybridapp.io
+      kind: Deployable
+  descriptor: {}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - hybridapp

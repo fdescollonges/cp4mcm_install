@@ -1,0 +1,46 @@
+apiVersion: declarativemonitoring.management.ibm.com/v1alpha1
+kind: SyntheticBundle
+metadata:
+  name: modresort-synthetic
+  namespace: modresort-app
+spec:
+  applicationRef:
+    name: modresort-app
+  ingressRef:
+    name: modresort-app-web-route
+    type: route
+  interval: 1m
+  #locations:
+  #  - Geneva
+  tests:
+    - configuration:
+        url: /resorts
+      syntheticType: HTTP
+      testName: Home page
+      threshold:
+        # consecutiveFailed: 2
+        # consecutiveSlow: 2
+        criticalThreshold: 25ms
+        warningThreshold: 10ms
+---
+apiVersion: declarativemonitoring.management.ibm.com/v1alpha1
+kind: SloBundle
+metadata:
+  name: modresort-slos1
+  namespace: modresort-app
+  labels:
+    app: modresort
+spec:
+  slos:
+    - name: SLO-Hourly-HomePage
+      objective:
+        measurementWindow: 1h
+        target: 99%
+      sli:
+        measurementType: latency
+        metricFilter:
+          url: /productpage
+        threshold:
+          max: 200ms
+  syntheticRef:
+    name: modresort-synthetic

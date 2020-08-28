@@ -1,0 +1,22 @@
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: chatops-st2chatops
+    namespace: management-operations
+    annotations:
+      description: Custom StackStorm chatops config, passed to hubot as ENV vars
+    labels:
+      app: st2chatops
+      tier: backend
+      release: chatops
+  type: Opaque
+  data:
+    DISABLE_USER_SYNC: "eWVz"
+    HUBOT_ADAPTER: "c2xhY2s="
+    HUBOT_LOG_LEVEL: "aW5mbw=="
+    HUBOT_NAME: "c3Jl" 
+    HUBOT_SLACK_BOTNAME: "c3Jl"
+    HUBOT_SLACK_CONVERSATION_CACHE_TTL_MS: "NDgwMDAw"
+    HUBOT_SLACK_RTM_CLIENT_OPTS: eyAicmV0cnlDb25maWciOiB7ICJyZXRyaWVzIjogMyB9LCAibG9nTGV2ZWwiOiAiaW5mbyIgfQo=
+    HUBOT_SLACK_RTM_START_OPTS: "eyAibXBpbV9hd2FyZSI6IHRydWUgfQ=="
+    HUBOT_SLACK_TOKEN: eG94Yi0xMzM5NDM2MDQ4MS0xMjQ0MDc0MDAzODE0LTd2NEJvWDdlY0JVVGZNazllYlZidEYzNw==

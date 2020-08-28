@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chatops-st2-pack-configs
+  namespace: management-operations
+  annotations:
+    description: Custom StackStorm pack configs, shipped in '/opt/stackstorm/configs/'
+  labels:
+    app: st2
+    release: chatops
+data:
+  cem_ibm.yaml: |-
+    ---
+      cluster: default
+      clusters:
+        default:
+          cem_url: https://cp-console.demo001-a376efc1170b9b8ace6422196c51e491-0000.eu-de.containers.appdomain.cloud//    ## the URL of IBM Cloud Pak&reg; for Multicloud Management
+          cem_apikey: id-mycluster-account/ruqcinrylkev
+          cem_apipass: SoeiPZTqJaYvu76okrBFDxewFKRzvFHd

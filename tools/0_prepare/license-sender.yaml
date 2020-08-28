@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-license-advisor-sender
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ibm-license-advisor-sender
+  template:
+    metadata:
+      labels:
+        app: ibm-license-advisor-sender
+    spec:
+      containers:
+        - name: sender
+          image: cp.icr.io/ibmcom/ibm-license-advisor-sender:2.0-latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SENDER_SERVICE_TYPE
+              value: license-service
+            - name: LICENSE_ADVISOR_URL
+              value: https://<License Advisor URL>
+            - name: LICENSE_ADVISOR_TOKEN
+              value: <License Advisor token>
+            - name: LICENSE_SERVICE_URL
+              value: https://<License Service hostname>
+            - name: LICENSE_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ibm-licensing-token
+                  key: token
+            - name: CLUSTER_ID
+              value: <Cluster ID>
+            - name: CLUSTER_NAME
+              value: <Cluster name>
+      imagePullSecrets:
+        - name: ibm-license-advisor-sender-registry

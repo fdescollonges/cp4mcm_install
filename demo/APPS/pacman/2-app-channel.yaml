@@ -1,0 +1,19 @@
+
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: pacman-channel
+  namespace: pacman-ns
+  generation: 1
+  labels:
+    app: pacman
+spec:
+  sourceNamespaces:
+  - pacman-ns
+  type: Namespace
+  pathname: pacman-ns
+  gates:
+    annotations:
+      dev-ready: approved
+
+

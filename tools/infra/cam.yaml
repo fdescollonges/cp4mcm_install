@@ -1,0 +1,122 @@
+apiVersion: cam.management.ibm.com/v1alpha1
+kind: ManageService
+metadata:
+  name: cam
+  namespace: management-infrastructure-management
+spec:
+  license:
+    accept: true
+  arch: amd64
+  oauthClientSecret: cam-oauth-client-secret
+  authIdpCredentialsSecret: ibm-iam-bindinfo-platform-auth-idp-credentials
+  rocks: true
+  auditService:
+    config:
+      journalPath: /run/systemd/journal
+    image:
+      pullPolicy: IfNotPresent
+      pullSecret: ''
+      repository: quay.io/opencloudio/
+      tag: 3.4.1
+    resources:
+      limits:
+        cpu: 200m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+  camAPI:
+    camSecret:
+      secretName: cam-api-secret
+    certificate:
+      certName: cert
+    replicaCount: 1
+  camAnsibleProvider:
+    replicaCount: 0
+  camBPDCDS:
+    options:
+      customSettingsFile: ''
+      debug:
+        enabled: false
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  camBpmProvider:
+    replicaCount: 0
+  camBroker:
+    replicaCount: 1
+  camBrokerProvider:
+    replicaCount: 0
+    storeNamespace: helm-consume-test
+  camProviderTerraform:
+    isolateRuntime: false
+    runtime:
+      replicaCount: 0
+  camController:
+    replicaCount: 1
+  camIcoProvider:
+    replicaCount: 0
+  camLoggingPolicies:
+    logLevel: info
+  camLogsPV:
+    name: cam-logs-pv
+    persistence:
+      enabled: false
+  camMongoPV:
+    name: cam-mongo-pv
+    persistence:
+      enabled: false
+  camProxy:
+    replicaCount: 1
+  camTerraformPV:
+    name: cam-terraform-pv
+    persistence:
+      enabled: false
+  camUI:
+    camUISecret:
+      secretName: cam-ui-secret
+      sessionKey: opsConsole.sid
+      sessionTTL: '43200'
+    replicaCount: 1
+  database:
+    bundled: true
+  global:
+    audit: false
+    enableFIPS: false
+    iam:
+      deployApiKey: ''
+    id:
+      productID: 4747644c9bae4473aa336e128c3cc3e9
+      productVersion: '2.0'
+      cloudpakID: 7f6eda41081c4e08a255be1f0b4aef2d
+      cloudpakVersion: '2.0'
+    image:
+      secretName: ibm-management-pull-secret
+    offline: false
+  icp:
+    cluster_name: mycluster
+    port: 443
+  image:
+    pullPolicy: IfNotPresent
+    repository: orpheus-local-docker.artifactory.swg-devops.com/orpheus/
+    tag: latest
+  managementConsole:
+    hostname: ''
+    port: 30000
+  platform: icp
+  proxy:
+    useProxy: false
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1500Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  secureValues:
+    secretName: ''

@@ -1,0 +1,1 @@
+kubectl delete pods -n kubetoy-project -l app=kubetoy

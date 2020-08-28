@@ -1,0 +1,179 @@
+---
+- MiqReport:
+    title: Chargeback
+    rpt_group: Custom
+    rpt_type: Custom
+    priority:
+    db: ChargebackVm
+    cols:
+    - start_date
+    - display_range
+    - vm_name
+    - provider_name
+    - owner_name
+    - chargeback_rates
+    - total_cost
+    - cpu_cost
+    - memory_cost
+    - storage_cost
+    include: {}
+    col_order:
+    - vm_name
+    - display_range
+    - provider_name
+    - owner_name
+    - chargeback_rates
+    - total_cost
+    - cpu_cost
+    - memory_cost
+    - storage_cost
+    headers:
+    - VM Name
+    - Date Range
+    - Provider Name
+    - Owner
+    - Chargeback Rates
+    - Total Cost
+    - CPU Total Cost
+    - Memory Total Cost
+    - Storage Total Cost
+    conditions:
+    order: Ascending
+    sortby:
+    - vm_name
+    - start_date
+    group: y
+    graph:
+    dims:
+    filename:
+    file_mtime:
+    categories: []
+    timeline:
+    template_type: report
+    where_clause:
+    db_options:
+      :rpt_type: ChargebackVm
+      :options:
+        :interval: daily
+        :interval_size: 28
+        :end_interval_offset: 0
+        :tenant_id: '1'
+        :method_for_allocated_metrics: :max
+        :include_metrics: true
+        :cumulative_rate_calculation: false
+        :groupby: date
+        :groupby_tag:
+        :groupby_label:
+    generate_cols:
+    generate_rows:
+    col_formats:
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    -
+    tz: UTC
+    time_profile_id:
+    display_filter:
+    col_options:
+      cpu_allocated_cost:
+        :grouping:
+        - :total
+      cpu_allocated_metric:
+        :grouping:
+        - :total
+      cpu_cost:
+        :grouping:
+        - :total
+      cpu_used_cost:
+        :grouping:
+        - :total
+      cpu_used_metric:
+        :grouping:
+        - :total
+      disk_io_used_cost:
+        :grouping:
+        - :total
+      disk_io_used_metric:
+        :grouping:
+        - :total
+      fixed_compute_metric:
+        :grouping:
+        - :total
+      fixed_compute_1_cost:
+        :grouping:
+        - :total
+      fixed_compute_2_cost:
+        :grouping:
+        - :total
+      fixed_cost:
+        :grouping:
+        - :total
+      fixed_storage_1_cost:
+        :grouping:
+        - :total
+      fixed_storage_2_cost:
+        :grouping:
+        - :total
+      memory_allocated_cost:
+        :grouping:
+        - :total
+      memory_allocated_metric:
+        :grouping:
+        - :total
+      memory_cost:
+        :grouping:
+        - :total
+      memory_used_cost:
+        :grouping:
+        - :total
+      memory_used_metric:
+        :grouping:
+        - :total
+      net_io_used_cost:
+        :grouping:
+        - :total
+      net_io_used_metric:
+        :grouping:
+        - :total
+      storage_allocated_cost:
+        :grouping:
+        - :total
+      storage_allocated_metric:
+        :grouping:
+        - :total
+      storage_cost:
+        :grouping:
+        - :total
+      storage_used_cost:
+        :grouping:
+        - :total
+      storage_used_metric:
+        :grouping:
+        - :total
+      total_cost:
+        :grouping:
+        - :total
+      storage_allocated_gp2_metric: &1
+        :grouping:
+        - :total
+      storage_allocated_gp2_cost: *1
+      storage_allocated_gp2_rate: *1
+      storage_allocated_unclassified_metric: *1
+      storage_allocated_unclassified_cost: *1
+      storage_allocated_unclassified_rate: *1
+    rpt_options:
+      :pdf:
+        :page_size: A4 - 210mm x 297mm (default)
+      :queue_timeout:
+      :summary:
+        :hide_detail_rows: false
+    miq_group_id: 21
+    user_id: 3
+    menu_name: Chargeback
+    userid: nik@ibm.com
+    group_description: demo
